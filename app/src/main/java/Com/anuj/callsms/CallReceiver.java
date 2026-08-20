@@ -3,13 +3,12 @@ package com.anuj.callsms;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.CallLog;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 
 public class CallReceiver extends BroadcastReceiver {
+
+    private static String incomingNumber = null;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -18,42 +17,46 @@ public class CallReceiver extends BroadcastReceiver {
             return;
         }
 
-        String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
+        String state = intent.getStringExtra(
+                TelephonyManager.EXTRA_STATE
+        );
 
+        // Jab incoming call aaye
+        if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
+
+            incomingNumber = intent.getStringExtra(
+                    TelephonyManager.EXTRA_INCOMING_NUMBER
+            );
+        }
+
+        // Jab call end ho
         if (TelephonyManager.EXTRA_STATE_IDLE.equals(state)) {
 
-            Cursor cursor = context.getContentResolver().query(
-                    CallLog.Calls.CONTENT_URI,
-                    new String[]{
-                            CallLog.Calls.NUMBER
-                    },
-                    null,
-                    null,
-                    CallLog.Calls.DATE + " DESC"
-            );
+            if (incomingNumber != null && !incomingNumber.isEmpty()) {
 
-            if (cursor != null && cursor.moveToFirst()) {
+                String message =
+                        "Namaste! Anuj Confectionary mein call karne ke liye "
+                        + "dhanyavaad. Aapki call receive ho gayi hai. "
+                        + "Kisi bhi order ya jankari ke liye isi number par "
+                        + "sampark karein.";
 
-                String number = cursor.getString(
-                        cursor.getColumnIndexOrThrow(CallLog.Calls.NUMBER)
-                );
-
-                cursor.close();
-
-                if (number != null && !number.isEmpty()) {
-
-                    String message =
-                            "Namaste, aapki call ke liye dhanyavaad.";
+                try {
 
                     SmsManager smsManager = SmsManager.getDefault();
+
                     smsManager.sendTextMessage(
-                            number,
+                            incomingNumber,
                             null,
                             message,
                             null,
                             null
                     );
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+
+                incomingNumber = null;
             }
         }
     }
