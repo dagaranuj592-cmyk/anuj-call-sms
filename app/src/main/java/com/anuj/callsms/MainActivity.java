@@ -1,13 +1,13 @@
 package com.anuj.callsms;
 
-import android.Manifest;
 import android.app.Activity;
+import android.app.role.RoleManager;
+import android.content.Intent;
 import android.os.Bundle;
-import android.content.pm.PackageManager;
 
 public class MainActivity extends Activity {
 
-    private static final int PERMISSION_REQUEST = 100;
+    private static final int ROLE_REQUEST_CODE = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,15 +15,26 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.activity_main);
 
-        if (android.os.Build.VERSION.SDK_INT >= 23) {
-            requestPermissions(
-                    new String[]{
-                            Manifest.permission.READ_PHONE_STATE,
-                            Manifest.permission.READ_CALL_LOG,
-                            Manifest.permission.SEND_SMS
-                    },
-                    PERMISSION_REQUEST
-            );
+        requestCallScreeningRole();
+    }
+
+    private void requestCallScreeningRole() {
+
+        if (android.os.Build.VERSION.SDK_INT >= 29) {
+
+            RoleManager roleManager = getSystemService(RoleManager.class);
+
+            if (roleManager != null &&
+                    roleManager.isRoleAvailable(RoleManager.ROLE_CALL_SCREENING) &&
+                    !roleManager.isRoleHeld(RoleManager.ROLE_CALL_SCREENING)) {
+
+                Intent intent =
+                        roleManager.createRequestRoleIntent(
+                                RoleManager.ROLE_CALL_SCREENING
+                        );
+
+                startActivityForResult(intent, ROLE_REQUEST_CODE);
+            }
         }
     }
 }
