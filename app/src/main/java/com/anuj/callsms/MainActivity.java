@@ -17,11 +17,12 @@ public class MainActivity extends Activity {
 
         if (android.os.Build.VERSION.SDK_INT >= 23) {
             requestPermissions(
-                new String[]{
-                    Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.SEND_SMS
-                },
-                PERMISSION_REQUEST
+                    new String[]{
+                            Manifest.permission.READ_PHONE_STATE,
+                            Manifest.permission.READ_CALL_LOG,
+                            Manifest.permission.SEND_SMS
+                    },
+                    PERMISSION_REQUEST
             );
         }
     }
