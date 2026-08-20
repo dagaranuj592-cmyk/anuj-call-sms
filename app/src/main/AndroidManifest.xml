@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
     <application
         android:theme="@android:style/Theme.Material.Light.NoActionBar"
         android:label="Anuj Call SMS">
@@ -15,6 +18,14 @@
             </intent-filter>
 
         </activity>
+
+        <receiver
+            android:name=".CallReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
 
     </application>
 
