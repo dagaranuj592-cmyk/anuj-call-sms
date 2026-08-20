@@ -1,10 +1,7 @@
 package com.anuj.callsms;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.telecom.Call;
-import android.telecom.CallScreeningService;
 
 public class CallScreeningService extends android.telecom.CallScreeningService {
 
@@ -19,10 +16,8 @@ public class CallScreeningService extends android.telecom.CallScreeningService {
 
             if (phoneNumber != null && !phoneNumber.isEmpty()) {
 
-                SharedPreferences prefs =
-                        getSharedPreferences("call_data", MODE_PRIVATE);
-
-                prefs.edit()
+                getSharedPreferences("call_data", MODE_PRIVATE)
+                        .edit()
                         .putString("last_call_number", phoneNumber)
                         .apply();
             }
