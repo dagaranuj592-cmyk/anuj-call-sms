@@ -3,6 +3,10 @@ package com.anuj.callsms;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.CallLog;
+import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 
 public class CallReceiver extends BroadcastReceiver {
@@ -16,16 +20,41 @@ public class CallReceiver extends BroadcastReceiver {
 
         String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
 
-        if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
-            // Incoming call started
-        }
-
-        if (TelephonyManager.EXTRA_STATE_OFFHOOK.equals(state)) {
-            // Call answered / active
-        }
-
         if (TelephonyManager.EXTRA_STATE_IDLE.equals(state)) {
-            // Call ended
+
+            Cursor cursor = context.getContentResolver().query(
+                    CallLog.Calls.CONTENT_URI,
+                    new String[]{
+                            CallLog.Calls.NUMBER
+                    },
+                    null,
+                    null,
+                    CallLog.Calls.DATE + " DESC"
+            );
+
+            if (cursor != null && cursor.moveToFirst()) {
+
+                String number = cursor.getString(
+                        cursor.getColumnIndexOrThrow(CallLog.Calls.NUMBER)
+                );
+
+                cursor.close();
+
+                if (number != null && !number.isEmpty()) {
+
+                    String message =
+                            "Namaste, aapki call ke liye dhanyavaad.";
+
+                    SmsManager smsManager = SmsManager.getDefault();
+                    smsManager.sendTextMessage(
+                            number,
+                            null,
+                            message,
+                            null,
+                            null
+                    );
+                }
+            }
         }
     }
 }
