@@ -22,59 +22,65 @@ public class CallReceiver extends BroadcastReceiver {
                 TelephonyManager.EXTRA_STATE
         );
 
-        // Jab incoming call aaye
+        // Incoming call
         if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
 
             incomingNumber = intent.getStringExtra(
                     TelephonyManager.EXTRA_INCOMING_NUMBER
             );
+
+            return;
         }
 
-        // Jab call end ho
+        // Call ended
         if (TelephonyManager.EXTRA_STATE_IDLE.equals(state)) {
 
-            if (incomingNumber != null && !incomingNumber.isEmpty()) {
+            if (incomingNumber == null || incomingNumber.isEmpty()) {
+                return;
+            }
 
-                // ON/OFF switch ki setting check karo
-                SharedPreferences preferences =
-                        context.getSharedPreferences(
-                                "sms_settings",
-                                Context.MODE_PRIVATE
-                        );
-
-                boolean smsEnabled =
-                        preferences.getBoolean("sms_enabled", true);
-
-                // Agar SMS OFF hai to kuch mat karo
-                if (!smsEnabled) {
-                    incomingNumber = null;
-                    return;
-                }
-
-                String message =
-                        "Namaste! Anuj Confectionary mein call karne ke liye dhanyavaad. "
-                        + "Aapki call receive ho gayi hai. "
-                        + "Kisi bhi order ya jankari ke liye isi number par sampark karein.";
-
-                try {
-
-                    SmsManager smsManager =
-                            SmsManager.getDefault();
-
-                    smsManager.sendTextMessage(
-                            incomingNumber,
-                            null,
-                            message,
-                            null,
-                            null
+            // Check ON/OFF setting
+            SharedPreferences preferences =
+                    context.getSharedPreferences(
+                            "sms_settings",
+                            Context.MODE_PRIVATE
                     );
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            boolean smsEnabled =
+                    preferences.getBoolean("sms_enabled", true);
 
+            // If Automatic SMS is OFF, don't send anything
+            if (!smsEnabled) {
                 incomingNumber = null;
+                return;
             }
+
+            // SMS message with digital menu link
+            String message =
+                    "Namaste! Anuj Confectionary mein call karne ke liye "
+                    + "dhanyavaad. Aapki call receive ho gayi hai.\n\n"
+                    + "Digital Menu:\n"
+                    + "https://anujconfectionarydigitalmenu.vercel.app/\n\n"
+                    + "Order ya jankari ke liye menu dekhein.";
+
+            try {
+
+                SmsManager smsManager =
+                        SmsManager.getDefault();
+
+                smsManager.sendTextMessage(
+                        incomingNumber,
+                        null,
+                        message,
+                        null,
+                        null
+                );
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            incomingNumber = null;
         }
     }
 }
