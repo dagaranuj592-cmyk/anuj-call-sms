@@ -55,13 +55,10 @@ public class CallReceiver extends BroadcastReceiver {
                 return;
             }
 
-            // SMS message with digital menu link
+            // Simple SMS without menu link
             String message =
                     "Namaste! Anuj Confectionary mein call karne ke liye "
-                    + "dhanyavaad. Aapki call receive ho gayi hai.\n\n"
-                    + "Digital Menu:\n"
-                    + "https://anujconfectionarydigitalmenu.vercel.app/\n\n"
-                    + "Order ya jankari ke liye menu dekhein.";
+                    + "dhanyavaad. Aapki call receive ho gayi hai.";
 
             try {
 
