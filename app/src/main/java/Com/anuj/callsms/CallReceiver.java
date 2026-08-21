@@ -39,7 +39,7 @@ public class CallReceiver extends BroadcastReceiver {
                 return;
             }
 
-            // Check ON/OFF setting
+            // Check Automatic SMS ON/OFF setting
             SharedPreferences preferences =
                     context.getSharedPreferences(
                             "sms_settings",
@@ -49,16 +49,17 @@ public class CallReceiver extends BroadcastReceiver {
             boolean smsEnabled =
                     preferences.getBoolean("sms_enabled", true);
 
-            // If Automatic SMS is OFF, don't send anything
+            // If SMS is OFF, don't send
             if (!smsEnabled) {
                 incomingNumber = null;
                 return;
             }
 
-            // Simple SMS without menu link
+            // Short SMS with Digital Menu link
             String message =
-                    "Namaste! Anuj Confectionary mein call karne ke liye "
-                    + "dhanyavaad. Aapki call receive ho gayi hai.";
+                    "Namaste 🙏 Anuj Confectionary\n"
+                    + "Aapki call receive ho gayi hai.\n\n"
+                    + "https://anujconfectionarydigitalmenu.vercel.app/";
 
             try {
 
