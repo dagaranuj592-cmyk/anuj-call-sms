@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -24,12 +25,30 @@
         android:padding="12dp" />
 
     <TextView
+        android:id="@+id/statusText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="System Active"
         android:textSize="20sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:padding="24dp" />
+        android:padding="20dp" />
+
+    <Switch
+        android:id="@+id/smsSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Automatic SMS"
+        android:textSize="18sp"
+        android:padding="12dp"
+        android:checked="true" />
+
+    <Button
+        android:id="@+id/menuButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Open Anuj Confectionary Menu"
+        android:textSize="17sp"
+        android:layout_marginTop="20dp" />
 
 </LinearLayout>
