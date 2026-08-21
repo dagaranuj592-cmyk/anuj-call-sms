@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 
+import java.util.ArrayList;
+
 public class CallReceiver extends BroadcastReceiver {
 
     private static String incomingNumber = null;
@@ -39,7 +41,6 @@ public class CallReceiver extends BroadcastReceiver {
                 return;
             }
 
-            // Check Automatic SMS ON/OFF setting
             SharedPreferences preferences =
                     context.getSharedPreferences(
                             "sms_settings",
@@ -49,16 +50,15 @@ public class CallReceiver extends BroadcastReceiver {
             boolean smsEnabled =
                     preferences.getBoolean("sms_enabled", true);
 
-            // If SMS is OFF, don't send
             if (!smsEnabled) {
                 incomingNumber = null;
                 return;
             }
 
-            // Short SMS with Digital Menu link
             String message =
-                    "Namaste 🙏 Anuj Confectionary\n"
+                    "Namaste Anuj Confectionary\n"
                     + "Aapki call receive ho gayi hai.\n\n"
+                    + "Digital Menu:\n"
                     + "https://anujconfectionarydigitalmenu.vercel.app/";
 
             try {
@@ -66,10 +66,13 @@ public class CallReceiver extends BroadcastReceiver {
                 SmsManager smsManager =
                         SmsManager.getDefault();
 
-                smsManager.sendTextMessage(
+                ArrayList<String> parts =
+                        smsManager.divideMessage(message);
+
+                smsManager.sendMultipartTextMessage(
                         incomingNumber,
                         null,
-                        message,
+                        parts,
                         null,
                         null
                 );
