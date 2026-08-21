@@ -56,10 +56,8 @@ public class CallReceiver extends BroadcastReceiver {
             }
 
             String message =
-                    "Namaste Anuj Confectionary\n"
-                    + "Aapki call receive ho gayi hai.\n\n"
-                    + "Digital Menu:\n"
-                    + "https://anujconfectionarydigitalmenu.vercel.app/";
+                
+                  "https://anujconfectionarydigitalmenu.vercel.app/";  
 
             try {
 
