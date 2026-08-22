@@ -56,7 +56,9 @@ public class CallReceiver extends BroadcastReceiver {
             }
 
             String message =
- "https://anujconfectionaryorderingsystem-1.vercel.app/";          
+                
+        "Welcome to Anuj Confectionary "
+        + "https://anujconfectionaryorderingsystem-1.vercel.app/";
                    
             try {
 
